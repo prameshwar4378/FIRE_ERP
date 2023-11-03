@@ -18,9 +18,13 @@ from django.contrib import admin
 from django.urls import path,include
 from Admin import urls as AdminUrls
 from Developer import urls as DeveloperUrls
+
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('default_admin/', admin.site.urls),
     path('admin/',include(AdminUrls)),
     path('developer/',include(DeveloperUrls)),
-]
+]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 
