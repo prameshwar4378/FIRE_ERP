@@ -1,0 +1,72 @@
+{% extends "admin__base.html" %}
+{% load crispy_forms_tags %}
+{% block containt %}
+
+<div class="page-header">
+    <h3 class="page-title">
+        <span class="page-title-icon bg-gradient-primary text-white me-2">
+            <i class="mdi mdi-account"></i>
+        </span> Update Products
+    </h3>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">
+                <span></span>Overview <i class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="container" style="max-width:90%;">
+                <form method="POST" enctype="multipart/form-data" action="">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-3">
+                            {{form.p_id|as_crispy_field}}
+                        </div>
+                        <div class="col-sm-6">
+                            {{form.name|as_crispy_field}}
+                        </div>
+                        <div class="col-sm-3">
+                            {{form.brand|as_crispy_field}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                        <center>
+                            <img src="" alt="" id="selectedImage" name="selectedImage" style="height:auto; width:60%;">
+                        </center>         
+                        {{form.p_image|as_crispy_field}}
+
+                        </div>
+                        <div class="col-sm-8">
+                            {{form.description|as_crispy_field}}
+                        </div>
+                    </div>
+                    <center> <input type="submit" value="Update" class="btn bg-gradient-primary text-light px-5 px-3">
+                    </center>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<script>
+    const imageInput = document.getElementById('id_p_image');
+    const selectedImage = document.getElementById('selectedImage');
+
+    imageInput.addEventListener('change', function () {
+        const file = imageInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                selectedImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+{% endblock containt %}

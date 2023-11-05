@@ -43,3 +43,53 @@ class Product_Creation_Form(forms.ModelForm):
             'p_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 
+
+class Supplier_Creation_Form(forms.ModelForm):
+    class Meta:
+        model = Supplier
+        fields = ('name','contact_info')
+        labels = {
+            'name': 'Supplier Name',
+            'contact_info':'Contact Information'
+        }   
+
+class PurchaseForm(forms.ModelForm):
+    class Meta:
+        model = Purchase
+        fields = ('purchase_invoice_number', 'supplier', 'date', 'total_amount','bill')
+        widgets = {
+            'date': forms.TextInput(attrs={'type': 'date'}), 
+        }
+
+
+class PurchaseItemForm(forms.ModelForm):
+    class Meta:
+        model = PurchaseItem
+        fields = ('product', 'quantity', 'rate', 'amount')
+        widgets = {
+            'quantity': forms.TextInput(attrs={'onchange': 'generate_amount()'}), 
+            'rate': forms.TextInput(attrs={'onchange': 'generate_amount()'}), 
+            'amount': forms.TextInput(attrs={'readonly': True}), 
+        }
+
+
+
+class SaleForm(forms.ModelForm):
+    class Meta:
+        model = Sale
+        fields = ('invoice_number', 'customer', 'date')
+        widgets = {
+            'date': forms.TextInput(attrs={'type': 'date'}), 
+        }
+
+
+class SaleItemForm(forms.ModelForm):
+    class Meta:
+        model = SaleItem
+        fields = ( 'quantity', 'rate', 'product', 'amount')
+        widgets = {
+            'quantity': forms.TextInput(attrs={'onchange': 'generate_amount()'}), 
+            'rate': forms.TextInput(attrs={'onchange': 'generate_amount()'}), 
+            'amount': forms.TextInput(attrs={'readonly': True}), 
+        }
+

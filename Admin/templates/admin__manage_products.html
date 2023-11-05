@@ -37,7 +37,11 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-4">
-                            {{form.p_image|as_crispy_field}}
+                        <center>
+                            <img src="" alt="" id="selectedImage" name="selectedImage" style="height:auto; width:60%;">
+                        </center>         
+                        {{form.p_image|as_crispy_field}}
+
                         </div>
                         <div class="col-sm-8">
                             {{form.description|as_crispy_field}}
@@ -67,18 +71,18 @@
             {% if records %}
             {% for r in records %}
             <tr>
-                <td>{{forloop.counter}}</td>
-                <td>{{r.p_id}}</td>
+                <td class="text-center">{{forloop.counter}}</td>
+                <td class="text-center">{{r.p_id}}</td>
                 <td>{{r.name}}</td>
-                <td>{{r.brand}}</td>
-                <td>{{r.description}}</td>
-                <td>{{r.p_image}}</td>
+                <td class="text-center">{{r.brand}}</td>
+                <td>{{r.description|slice:20}}.......</td>
+                <td class="text-center"><a href="/media/{{r.p_image}}" download><i class="mdi mdi-download btn btn-info"></i></a></td>
                 <td>
                     <center>
                         <a href="#" class="btn btn-success px-3 view-details" data-toggle="modal"
                             data-target="#detail_modal" onclick="view_product_details('{{r.p_id}}','{{r.name}}','{{r.brand}}','{{r.description}}','{{r.p_image}}')">
                             <i class="mdi mdi-eye"></i></a>
-                        <a href=" " class="btn btn-primary px-3"><i class="mdi mdi-pencil-box-outline"></i></a>
+                        <a href="{% url "admin__update_product" r.id %}" class="btn btn-primary px-3"><i class="mdi mdi-pencil-box-outline"></i></a>
                         <a href="{% url "admin__delete_product" r.id %}" class="btn btn-danger px-3"><i
                                 class="mdi mdi-delete"></i></a>
                     </center>
@@ -98,20 +102,21 @@
                                     <div class="row">
                                         <div class="col-sm-8">
                                             <div class="row">
-                                                <div class="col-sm-6 "><div class="model-cards">ID <hr> <h4>402</h4></div></div>
-                                                <div class="col-sm-6 "><div class="model-cards">BRAND <hr> <h4>Bajjaj</h4></div></div>
+                                                <div class="col-sm-6"><div class="model-cards">ID <hr> <h4 id="productID">402</h4></div></div>
+                                                <div class="col-sm-6"><div class="model-cards">BRAND <hr> <h4 id="productBrand">Bajaj</h4></div></div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-sm-12 "><div class="model-cards">NAME <hr> <h4>Name</h4></div></div>
+                                                <div class="col-sm-12"><div class="model-cards">NAME <hr> <h4 id="productName">Name</h4></div></div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-sm-12 "><div class="model-cards">DESCRIPTION <hr> <p>This is the paragraphi tect</p></div></div>
+                                                <div class="col-sm-12"><div class="model-cards">DESCRIPTION <hr> <p id="productDescription">This is the paragraph text</p></div></div>
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
-                                            <img src="https://media.istockphoto.com/id/1182647541/photo/wonders-of-the-night-sky.jpg?s=612x612&w=0&k=20&c=INNH-3NsVMGIsly8_KUeqjh1qjFzdxPUzmuQIGETVxQ=" style="border-radius:10px; width:100%; height:100%;" alt="">
+                                            <img id="productImage" src="https://media.istockphoto.com/id/1182647541/photo/wonders-of-the-night-sky.jpg?s=612x612&w=0&k=20&c=INNH-3NsVMGIsly8_KUeqjh1qjFzdxPUzmuQIGETVxQ=" style="border-radius:10px; width:100%; height:100%;" alt="">
                                         </div>
                                     </div>
+                                    
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -133,9 +138,36 @@
     </table>
 </div>
  
+<!-- Include the 'host' variable in your HTML -->
 <script>
-    function view_product_details(p_id,name,brand,description,p_image){
+    var host = "{{ host }}";  // Assuming 'host' is defined in your HTML context.
     
+    function view_product_details(p_id, name, brand, description, p_image) {
+        // Construct the product image path using the 'host' variable
+        var product_image_path = host + "/media/" + p_image;
+        // Update the content of <h4> tags and image src
+        document.getElementById('productID').textContent = p_id;
+        document.getElementById('productBrand').textContent = brand;
+        document.getElementById('productName').textContent = name;
+        document.getElementById('productDescription').textContent = description;
+        document.getElementById('productImage').src = product_image_path;
     }
+</script>
+
+
+<script>
+    const imageInput = document.getElementById('id_p_image');
+    const selectedImage = document.getElementById('selectedImage');
+
+    imageInput.addEventListener('change', function () {
+        const file = imageInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                selectedImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 </script>
 {% endblock containt %}

@@ -1,0 +1,133 @@
+{% extends "admin__base.html" %}
+{% load crispy_forms_tags %}
+{% block containt %}
+
+<div class="page-header">
+    <h3 class="page-title">
+        <span class="page-title-icon bg-gradient-primary text-white me-2">
+            <i class="mdi mdi-account"></i>
+        </span> Sale Bill List
+    </h3>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">
+                <span class="btn bg-gradient-primary text-light" data-toggle="modal"
+                data-target="#add_customer_form">New Bill</span> 
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="container bg-light px-3 py-3" style="max-width:95%; border-radius:10px; box-shadow:0px 0px 10px #D8D5D8">
+                <form method="POST" enctype="multipart/form-data" action="">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label for="Invoice">Invoice Number</label>
+                            <input type="text" name="Invoice" id="Invoice" class="form-control mt-2" placeholder="enter invoice number">
+                        </div>
+                        <div class="col-sm-3">
+                            {{form.customer|as_crispy_field}}
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="Invoice">Start Date</label>
+                            <input type="date" name="Invoice" id="Invoice" class="form-control mt-2" placeholder="enter invoice number">
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="Invoice">End Date</label>
+                            <input type="date" name="Invoice" id="Invoice" class="form-control mt-2" placeholder="enter invoice number">
+                        </div>
+                    </div> 
+                    <center> <input type="text" value="Apply Filter" class="btn bg-gradient-primary text-light px-5 px-3 mt-3">
+                    </center>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<div class="modal fade" id="add_customer_form" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:1000px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add New Customer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"> 
+                <div class="row">
+                    <form method="POST" enctype="multipart/form-data" action="{% url "admin__sale_list" %}">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-sm-6">
+                                {{form.invoice_number|as_crispy_field}}
+                            </div>
+                            <div class="col-sm-6">
+                                {{form.customer|as_crispy_field}}
+                            </div>
+                            <div class="col-sm-6">
+                                {{form.date|as_crispy_field}}
+                            </div>
+                        </div> 
+                        <center> <input type="submit" value="Submit" class="btn bg-gradient-primary text-light px-5 px-3">
+                        </center>
+                    </form>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-3" style=" overflow:scroll;">
+    <table id="example" class="table table-striped " style="overflow:scroll; width:100%;min-width: max-content;">
+        <thead>
+            <tr style="background:#02B4C3;">
+                <th scope="col" class="text-center text-white" style="">Sr.No</th>
+                <th scope="col" class="text-center text-white" style="">Date</th>
+                <th scope="col" class="text-center text-white" style="">Invoice Number</th>
+                <th scope="col" class="text-center text-white" style="">Customer Name</th>
+                <th scope="col" class="text-center text-white" style="">Amount</th>
+                <th scope="col" class="text-center text-white" style="">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if records %}
+            {% for r in records %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{r.date}}</td>
+                <td>{{r.invoice_number}}</td>
+                <td>{{r.customer}}</td>
+                <td>
+                    <center>
+                    {% if r.total_amount %}
+                    {{r.total_amount}}
+                    {% else %}
+                    ---
+                    {% endif %}
+                    </center>
+                </td>
+                <td>
+                    <center> 
+                        <a href="{% url "admin__sale_item_list" r.id %}" class="btn btn-info px-3">Manage Items</a>
+                        <a href="{% url "admin__update_sale" r.id %}" class="btn btn-primary px-3"><i class="mdi mdi-pencil-box-outline"></i></a>
+                        <a href="{% url "admin__delete_sale" r.id %}" class="btn btn-danger px-3"><i
+                                class="mdi mdi-delete"></i></a>
+                    </center>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock containt %}

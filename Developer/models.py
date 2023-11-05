@@ -37,10 +37,10 @@ class Supplier(models.Model):
 
 
 class Sale(models.Model):
-    sale_id=models.CharField(max_length=10)
+    invoice_number=models.CharField(max_length=10)
     customer = models.ForeignKey(Customers, on_delete=models.CASCADE)
     date = models.DateField()
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2,null=True,blank=True)
     
     class Meta:
         indexes = [
@@ -50,11 +50,11 @@ class Sale(models.Model):
 
 
 class SaleItem(models.Model):
-    sale_item_id = models.CharField(max_length=10)  # Rename the field
     sale = models.ForeignKey(Sale, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.DecimalField(max_digits=10, decimal_places=2)
+    quantity = models.DecimalField(max_digits=10, decimal_places=0)
     rate = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2,null=True)
     
     class Meta:
         indexes = [
@@ -64,10 +64,11 @@ class SaleItem(models.Model):
 
 
 class Purchase(models.Model):
-    purchase_id=models.CharField(max_length=10)
+    purchase_invoice_number=models.CharField(max_length=10)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     date = models.DateField()
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    bill=models.FileField( upload_to="Purchase Bills", max_length=100,null=True,blank=True)
     
     class Meta:
         indexes = [
@@ -77,12 +78,11 @@ class Purchase(models.Model):
 
 
 class PurchaseItem(models.Model):
-    purchase_item_id = models.CharField(max_length=10)  # Rename the field
     purchase = models.ForeignKey(Purchase, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.DecimalField(max_digits=10, decimal_places=2)
-    rate = models.DecimalField(max_digits=10, decimal_places=2)
-    
+    quantity = models.DecimalField(max_digits=5, decimal_places=0)
+    rate = models.DecimalField(max_digits=5, decimal_places=2)
+    amount=models.DecimalField(max_digits=10, decimal_places=2, null=True)
     class Meta:
         indexes = [
             models.Index(fields=['purchase']),

@@ -1,12 +1,16 @@
 {% extends "admin__base.html" %}
 {% load crispy_forms_tags %}
 {% block containt %}
-
+<style>
+    #id_bill{
+        border:3px dotted #B9B8B9;
+    }
+</style>
 <div class="page-header">
     <h3 class="page-title">
         <span class="page-title-icon bg-gradient-primary text-white me-2">
             <i class="mdi mdi-account"></i>
-        </span> Customer List
+        </span> Purchase List
     </h3>
     <nav aria-label="breadcrumb">
         <ul class="breadcrumb">
@@ -24,21 +28,22 @@
                 <form method="POST" enctype="multipart/form-data" action="">
                     {% csrf_token %}
                     <div class="row">
-                        <div class="col-sm-4">
-                            {{form.name|as_crispy_field}}
+                        <div class="col-sm-6">
+                            {{form.purchase_invoice_number|as_crispy_field}}
+                        </div>
+                        <div class="col-sm-6">
+                            {{form.supplier|as_crispy_field}}
                         </div>
                         <div class="col-sm-4">
-                            {{form.mobile_number|as_crispy_field}}
+                            {{form.date|as_crispy_field}}
                         </div>
                         <div class="col-sm-4">
-                            {{form.email|as_crispy_field}}
+                            {{form.total_amount|as_crispy_field}}
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            {{form.address|as_crispy_field}}
+                        <div class="col-sm-4">
+                            {{form.bill|as_crispy_field}}
                         </div>
-                    </div>
+                    </div> 
                     <center> <input type="submit" value="Submit" class="btn bg-gradient-primary text-light px-5 px-3">
                     </center>
                 </form>
@@ -51,10 +56,11 @@
         <thead>
             <tr style="background:#02B4C3;">
                 <th scope="col" class="text-center text-white" style="">Sr.No</th>
-                <th scope="col" class="text-center text-white" style="">Name</th>
-                <th scope="col" class="text-center text-white" style="">Contact_No</th>
-                <th scope="col" class="text-center text-white" style="">Email</th>
-                <th scope="col" class="text-center text-white" style="">Address</th>
+                <th scope="col" class="text-center text-white" style="">Invoice Number</th>
+                <th scope="col" class="text-center text-white" style="">Suplier</th>
+                <th scope="col" class="text-center text-white" style="">Date</th>
+                <th scope="col" class="text-center text-white" style="">Amount</th>
+                <th scope="col" class="text-center text-white" style="">Bill</th>
                 <th scope="col" class="text-center text-white" style="">Action</th>
             </tr>
         </thead>
@@ -63,14 +69,24 @@
             {% for r in records %}
             <tr>
                 <td>{{forloop.counter}}</td>
-                <td>{{r.name}}</td>
-                <td>{{r.mobile_number}}</td>
-                <td>{{r.email}}</td>
-                <td>{{r.address}}</td>
+                <td>{{r.purchase_invoice_number}}</td>
+                <td>{{r.supplier}}</td>
+                <td>{{r.date}}</td>
+                <td>{{r.total_amount}}</td>
+                <td>
+                    <center>
+                    {% if r.bill %}
+                    <a href="/media/{{r.bill}}" download><i class="mdi mdi-download btn btn-info"></i></a>
+                    {% else %}
+                    ---
+                    {% endif %}
+                    </center>
+                </td>
                 <td>
                     <center> 
-                        <a href="{% url "admin__update_customer" r.id %}" class="btn btn-primary px-3"><i class="mdi mdi-pencil-box-outline"></i></a>
-                        <a href="{% url "admin__delete_customer" r.id %}" class="btn btn-danger px-3"><i
+                        <a href="{% url "admin__purchase_item_list" r.id %}" class="btn btn-info px-3">Manage Items</a>
+                        <a href="{% url "admin__update_purchase" r.id %}" class="btn btn-primary px-3"><i class="mdi mdi-pencil-box-outline"></i></a>
+                        <a href="{% url "admin__delete_purchase" r.id %}" class="btn btn-danger px-3"><i
                                 class="mdi mdi-delete"></i></a>
                     </center>
                 </td>

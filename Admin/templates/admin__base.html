@@ -191,8 +191,21 @@
                 <span class="menu-title">Dashboard</span>
                 <i class="mdi mdi-home menu-icon"></i>
               </a>
-            </li> 
+            </li>  
             
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="collapse" href="#erp" aria-expanded="false" aria-controls="ui-basic">
+                <span class="menu-title">ERP</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-deskphone menu-icon"></i>
+              </a>
+              <div class="collapse" id="erp">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href=" ">Dashboard</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="{% url "admin__erp_links" %}">Links</a></li>
+                </ul>
+              </div>
+            </li>
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#manage" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">Manage</span>
@@ -210,6 +223,12 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url "admin__customers_list" %}">
                 <span class="menu-title">Customers List</span>
+                <i class="mdi mdi-contacts menu-icon"></i>
+              </a>
+            </li> 
+            <li class="nav-item">
+              <a class="nav-link" href="{% url "admin__supplier_list" %}">
+                <span class="menu-title">Supplier List</span>
                 <i class="mdi mdi-contacts menu-icon"></i>
               </a>
             </li> 
@@ -236,11 +255,9 @@
         <div class="main-panel">
           <div class="content-wrapper">
 
-            <div class="row">
                
               {% block containt %}{% endblock containt %}
 
-            </div>
             <!-- <div class="row">
               <div class="col-md-7 grid-margin stretch-card">
                 <div class="card">

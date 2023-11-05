@@ -1,0 +1,30 @@
+{% extends "admin__base.html" %}
+{% load crispy_forms_tags %}
+{% block containt %}
+
+<div class="page-header">
+    <h3 class="page-title">
+        <span class="page-title-icon bg-gradient-primary text-white me-2">
+            <i class="mdi mdi-account"></i>
+        </span> ERP Important Links
+    </h3>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">
+                <span></span>Overview <i class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
+            </li>
+        </ul>
+    </nav>
+</div>
+<hr>
+<div class="row">
+    <div class="col-lg-12">
+            <a href="{% url "admin__sale_list" %}" class="btn btn-success mt-2 mx-2 my-2">New Bill</a>
+            <a href="{% url "admin__purchase_list" %}" class="btn btn-primary mt-2 mx-2 my-2">Purchase Stock</a>
+            <a href="#" class="btn btn-primary mt-2 mx-2 my-2">Go somewhere</a>
+            <a href="#" class="btn btn-primary mt-2 mx-2 my-2">Go somewhere</a>
+            <a href="#" class="btn btn-primary mt-2 mx-2 my-2">Go somewhere</a>
+    </div>
+</div>
+ 
+{% endblock containt %}
